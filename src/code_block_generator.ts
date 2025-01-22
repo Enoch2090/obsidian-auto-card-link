@@ -43,20 +43,21 @@ export class CodeBlockGenerator {
       this.editor.replaceRange(selectedText || url, startPos, endPos);
       return;
     }
-    this.editor.replaceRange(this.genCodeBlock(linkMetadata), startPos, endPos);
+    this.editor.replaceRange(this.genCodeBlock(linkMetadata, startPos.ch), startPos, endPos);
   }
 
-  genCodeBlock(linkMetadata: LinkMetadata): string {
-    const codeBlockTexts = ["\n```cardlink"];
-    codeBlockTexts.push(`url: ${linkMetadata.url}`);
-    codeBlockTexts.push(`title: "${linkMetadata.title}"`);
+  genCodeBlock(linkMetadata: LinkMetadata, indentLevel: number): string {
+    const indent = "\t".repeat(indentLevel);
+    const codeBlockTexts = ["```cardlink"];
+    codeBlockTexts.push(indent + `url: ${linkMetadata.url}`);
+    codeBlockTexts.push(indent + `title: "${linkMetadata.title}"`);
     if (linkMetadata.description)
-      codeBlockTexts.push(`description: "${linkMetadata.description}"`);
-    if (linkMetadata.host) codeBlockTexts.push(`host: ${linkMetadata.host}`);
+      codeBlockTexts.push(indent + `description: "${linkMetadata.description}"`);
+    if (linkMetadata.host) codeBlockTexts.push(indent + `host: ${linkMetadata.host}`);
     if (linkMetadata.favicon)
-      codeBlockTexts.push(`favicon: ${linkMetadata.favicon}`);
-    if (linkMetadata.image) codeBlockTexts.push(`image: ${linkMetadata.image}`);
-    codeBlockTexts.push("```\n");
+      codeBlockTexts.push(indent + `favicon: ${linkMetadata.favicon}`);
+    if (linkMetadata.image) codeBlockTexts.push(indent + `image: ${linkMetadata.image}`);
+    codeBlockTexts.push(indent + "```\n");
     return codeBlockTexts.join("\n");
   }
 
